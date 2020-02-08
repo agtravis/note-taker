@@ -46,6 +46,14 @@ app.get('/api/notes', (req, res) => {
   readFileAsync('./db.json', 'utf8', (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
+    for (const note of notes) {
+      if (!note.id) {
+        note.id = note.title.replace(/ +/g, '-');
+      }
+    }
+    writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
+      if (err) throw err;
+    });
     res.json(notes);
   });
 });
@@ -57,10 +65,22 @@ app.post('/api/notes', (req, res) => {
     if (err) throw err;
     notes = JSON.parse(data);
     notes.push(newNote);
+    for (const note of notes) {
+      if (!note.id) {
+        note.id = note.title.replace(/ +/g, '-');
+      }
+    }
     writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
       if (err) throw err;
     });
   });
+  res.sendFile(path.join(__dirname, 'notes.html'));
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+  const item = req.params.id;
+  const toDelete = item;
+  console.log(toDelete);
   res.sendFile(path.join(__dirname, 'notes.html'));
 });
 
