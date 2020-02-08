@@ -26,28 +26,18 @@ readFileAsync('./db.json', 'utf8', (err, data) => {
 // Routes
 // =============================================================
 
+app.get('/assets/css/styles.css', (req, res) =>
+  res.sendFile(path.join(__dirname, '/assets/css/styles.css'))
+);
+app.get('/assets/js/index.js', (req, res) =>
+  res.sendFile(path.join(__dirname, '/assets/js/index.js'))
+);
+
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, 'notes.html'))
 );
-
-// // Create New Characters - takes in JSON input
-// app.post('/api/characters', (req, res) => {
-//   // req.body hosts is equal to the JSON post sent from the user
-//   // This works because of our body parsing middleware
-//   const newCharacter = req.body;
-
-//   // Using a RegEx Pattern to remove spaces from newCharacter
-//   // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-//   newCharacter.routeName = newCharacter.name.replace(/\s+/g, '').toLowerCase();
-
-//   console.log(newCharacter);
-
-//   characters.push(newCharacter);
-
-//   res.json(newCharacter);
-// });
 
 // =============================================================
 // Listener
