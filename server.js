@@ -16,14 +16,6 @@ const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// let notes = '';
-
-// readFileAsync('./db.json', 'utf8', (err, data) => {
-//   if (err) throw err;
-//   notes = data;
-//   console.log(notes);
-// });
-
 // =============================================================
 // Routes
 // =============================================================
