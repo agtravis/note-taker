@@ -11,7 +11,7 @@ const readFileAsync = util.promisify(readFile);
 const writeFileAsync = util.promisify(writeFile);
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -79,8 +79,19 @@ app.post('/api/notes', (req, res) => {
 
 app.delete('/api/notes/:id', (req, res) => {
   const item = req.params.id;
-  const toDelete = item;
-  console.log(toDelete);
+  let notes = '';
+  readFileAsync('./db.json', 'utf8', (err, data) => {
+    if (err) throw err;
+    notes = JSON.parse(data);
+    for (const note of notes) {
+      if (note.id === item) {
+        notes.splice(notes.indexOf(note), 1);
+      }
+    }
+    writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
+      if (err) throw err;
+    });
+  });
   res.sendFile(path.join(__dirname, 'notes.html'));
 });
 
