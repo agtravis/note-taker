@@ -5,8 +5,10 @@ const path = require('path');
 const util = require('util');
 const fs = require('fs');
 const readFile = fs.readFile;
+const writeFile = fs.writeFile;
 
 const readFileAsync = util.promisify(readFile);
+const writeFileAsync = util.promisify(writeFile);
 
 const app = express();
 const PORT = 3000;
@@ -50,7 +52,16 @@ app.get('/api/notes', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   const newNote = req.body;
-  console.log(newNote);
+  let notes = '';
+  readFileAsync('./db.json', 'utf8', (err, data) => {
+    if (err) throw err;
+    notes = JSON.parse(data);
+    notes.push(newNote);
+    writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
+      if (err) throw err;
+    });
+  });
+  res.sendFile(path.join(__dirname, 'notes.html'));
 });
 
 // =============================================================
