@@ -2,13 +2,7 @@
 
 const express = require('express');
 const path = require('path');
-const util = require('util');
 const fs = require('fs');
-const readFile = fs.readFile;
-const writeFile = fs.writeFile;
-
-const readFileAsync = util.promisify(readFile);
-const writeFileAsync = util.promisify(writeFile);
 
 const app = express();
 const PORT = process.env.PORT;
@@ -16,13 +10,10 @@ const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// =============================================================
-// Routes
-// =============================================================
-
 app.get('/assets/css/styles.css', (req, res) =>
   res.sendFile(path.join(__dirname, '/assets/css/styles.css'))
 );
+
 app.get('/assets/js/index.js', (req, res) =>
   res.sendFile(path.join(__dirname, '/assets/js/index.js'))
 );
@@ -35,7 +26,7 @@ app.get('/notes', (req, res) =>
 
 app.get('/api/notes', (req, res) => {
   let notes = '';
-  readFileAsync('./db.json', 'utf8', (err, data) => {
+  fs.readFile('./db.json', 'utf8', (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
     for (const note of notes) {
@@ -43,7 +34,7 @@ app.get('/api/notes', (req, res) => {
         note.id = note.title.replace(/ +/g, '-');
       }
     }
-    writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
+    fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
       if (err) throw err;
     });
     res.json(notes);
@@ -53,7 +44,7 @@ app.get('/api/notes', (req, res) => {
 app.post('/api/notes', (req, res) => {
   const newNote = req.body;
   let notes = '';
-  readFileAsync('./db.json', 'utf8', (err, data) => {
+  fs.readFile('./db.json', 'utf8', (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
     notes.push(newNote);
@@ -62,7 +53,7 @@ app.post('/api/notes', (req, res) => {
         note.id = note.title.replace(/ +/g, '-');
       }
     }
-    writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
+    fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
       if (err) throw err;
     });
   });
@@ -72,7 +63,7 @@ app.post('/api/notes', (req, res) => {
 app.delete('/api/notes/:id', (req, res) => {
   const item = req.params.id;
   let notes = '';
-  readFileAsync('./db.json', 'utf8', (err, data) => {
+  fs.readFile('./db.json', 'utf8', (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
     for (const note of notes) {
@@ -80,15 +71,11 @@ app.delete('/api/notes/:id', (req, res) => {
         notes.splice(notes.indexOf(note), 1);
       }
     }
-    writeFileAsync('./db.json', JSON.stringify(notes), 'utf8', err => {
+    fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
       if (err) throw err;
     });
   });
   res.sendFile(path.join(__dirname, 'notes.html'));
 });
-
-// =============================================================
-// Listener
-// =============================================================
 
 app.listen(PORT, () => console.log('App listening on PORT ' + PORT));
