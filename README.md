@@ -116,9 +116,19 @@ Nothing is stored on the user's device, so they will see the same list however t
 
 ## Features
 
+This app features a nice UI, simple design and easy operation.
+
 ## Status
 
+This app presently only works for one individual. For different users to utilize the app, each user would have to fork the repository and deploy their own version of the app. In order to make this marketable, it would at a minimum have to implement some sort of user log-in or authentication process (for example accessing the user's IP address, or accessing sign in credentials with Google sign in).
+
+Additionally, this app doesn't actually interact with a database. As mentioned before, it is a pseudo-database, in that it is a JSON document that is rewritten each time anything changes with a POST or DELETE request. The downside to this is it has no durability - if the server goes down or resets, the updated JSON file (all the user's saved notes) will be lost and will revert back to the version most recently push via GitHub.
+
+This app also does not have the ability to update existing notes (PUT request). In order to initiate this, the HTML and JavaScript files would need to be updated.
+
 ### Future Developement
+
+This has mostly been touched on in the _Status_ section, however the next step would be to make notes editable. Without implementing a PUT request, if clicking on the note brought up an editable text (currently it is an element rather than an input), then it could be edited, and a save could be programmed to _overwrite_ the existing note (this would most likely actually simply simultaneously delete the previous note and write a brand new note) to 'update' it. However this would just be using GET, POST, and DELETE, just all at the same time.
 
 ## Contact
 
