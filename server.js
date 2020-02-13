@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = 3000; //process.env.PORT;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -76,6 +76,14 @@ app.delete('/api/notes/:id', (req, res) => {
     });
   });
   res.sendFile(path.join(__dirname, 'notes.html'));
+});
+
+app.get('/*', function(req, res) {
+  res.send(
+    `<h1>404 error! ${req.protocol}://${req.get('host')}${
+      req.path
+    } does not exist! Better luck next time!</h1>`
+  );
 });
 
 app.listen(PORT, () => console.log('App listening on PORT ' + PORT));
