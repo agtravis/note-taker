@@ -1,1 +1,9 @@
-[{"title":"Trash","text":"Take out the trash by 9am Monday","id":"Trash"},{"title":"Guitar Lesson","text":"Tuesday @ 6pm","id":"Guitar-Lesson"},{"title":"TV Show","text":"Friday Night","id":"TV-Show"}]
+[
+  {
+    "title": "Trash",
+    "text": "Take out the trash by 9am Monday",
+    "id": "Trash"
+  },
+  { "title": "Guitar Lesson", "text": "Tuesday @ 6pm", "id": "Guitar-Lesson" },
+  { "title": "TV Show", "text": "Friday Night", "id": "TV-Show" }
+]
