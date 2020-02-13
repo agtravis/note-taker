@@ -23,8 +23,7 @@ The main function of this app is to keep track of a 'to-do' list, or creative id
 
 ## Screenshots
 
-![CLI](https://github.com/agtravis/node-resume-generator/blob/master/assets/images/CLI.PNG)
-![finished](https://github.com/agtravis/node-resume-generator/blob/master/assets/images/output.PNG)
+![Note-taker](./assets/images/enter-notes.PNG)
 
 ## Technologies
 
