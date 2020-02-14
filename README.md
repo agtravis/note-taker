@@ -109,9 +109,31 @@ In the routing for the DELETE request, a parameter is sent back to the handling.
 
 Once the data has been accessed, a `for...of` loop runs on it which checks each object to see if the id property matches the id that has been passed. Once that has been matched, it is removed from the array, and the document is rewritten and then passed to the browser.
 
+Here is the JavaScript (actually jQuery) for deleting a note (condensed for relevance):
+
+    const handleNoteDelete = function(event) {
+        event.stopPropagation();
+        const note = $(this).parent('.list-group-item').data();
+        //JavaScript functions
+        deleteNote(note.id).then(function() {
+            //code to render HTML
+        });
+    };
+
+This code block shows that when a user clicks on the delete icon, the data attached to the parent node of that icon is passed as a variable to the `deleteNote` function, which...:
+
+    const deleteNote = function(id) {
+        return $.ajax({
+            url: 'api/notes/' + id,
+            method: 'DELETE'
+        });
+    };
+
+...can be seen in this AJAX request. The property `id` is sent via the URL back to the route where it is handled as a wildcard. Again, since it is passed through the URL, we can see it needs to be a string with the same rules that apply to a URL, hence using a `replace` method (here with regex) to remove any space characters.
+
 ## Setup
 
-Nothing is stored on the user's device, so they will see the same list however they access the app. To use it they simply visit the URL https://agtravis-note-taker.herokuapp.com/.
+Nothing is stored on the user's device, so they will see the same list however they access the app. To use it they simply visit the URL https://agtravis-note-taker.herokuapp.com/. There are some pre-coded events written purely to give the list examples to populate with. The user can easily delete these.... Alternatively they can make plans to match the notes, whatever they like.
 
 ## Features
 
