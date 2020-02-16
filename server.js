@@ -29,9 +29,14 @@ app.get('/api/notes', (req, res) => {
   fs.readFile('./db.json', 'utf8', (err, data) => {
     if (err) throw err;
     notes = JSON.parse(data);
-    for (const note of notes) {
-      if (!note.id) {
-        note.id = note.title.replace(/ +/g, '-');
+    for (let i = 0; i < notes.length; ++i) {
+      if (!notes[i].id) {
+        notes[i].id = notes[i].title.replace(/ +/g, '-');
+      }
+      for (let j = i + 1; j < notes.length; ++j) {
+        if (notes[i].id === notes[j].id) {
+          notes[j].id += '-x';
+        }
       }
     }
     fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
@@ -48,9 +53,14 @@ app.post('/api/notes', (req, res) => {
     if (err) throw err;
     notes = JSON.parse(data);
     notes.push(newNote);
-    for (const note of notes) {
-      if (!note.id) {
-        note.id = note.title.replace(/ +/g, '-');
+    for (let i = 0; i < notes.length; ++i) {
+      if (!notes[i].id) {
+        notes[i].id = notes[i].title.replace(/ +/g, '-');
+      }
+      for (let j = i + 1; j < notes.length; ++j) {
+        if (notes[i].id === notes[j].id) {
+          notes[j].id += '-x';
+        }
       }
     }
     fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
