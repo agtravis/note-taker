@@ -48,9 +48,14 @@ Finally, the app listens to a port which is defined as `process.env.PORT` so tha
         fs.readFile('./db.json', 'utf8', (err, data) => {
             if (err) throw err;
             notes = JSON.parse(data);
-            for (const note of notes) {
-                if (!note.id) {
-                    note.id = note.title.replace(/ +/g, '-');
+            for (let i = 0; i < notes.length; ++i) {
+                if (!notes[i].id) {
+                    notes[i].id = notes[i].title.replace(/ +/g, '-');
+                }
+                for (let j = i + 1; j < notes.length; ++j) {
+                    if (notes[i].id === notes[j].id) {
+                        notes[j].id += '-x';
+                    }
                 }
             }
             fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
@@ -60,7 +65,7 @@ Finally, the app listens to a port which is defined as `process.env.PORT` so tha
         });
     });
 
-This route first establishes an empty variable to be an empty string. Next it reads the JSON file and writes the content into the variable as a JSON object. If a nested object of the JSON object does not contain a specific property 'id', it is assigned based on the text contained in the title. Later in the code, this id is going to be passed in the URL, so a `replace` method is run on the text (using `regex`) to ensure that all space characters are replaced with a hyphen. This is then written as a new file that overwrites the existing file, and then the HTML file is sent to the browser - The HTML file has JavaScript that calls the API to populate the page with the notes being 'stored' in the JSON file (the JSON file is acting as a pseudo-database).
+This route first establishes an empty variable to be an empty string. Next it reads the JSON file and writes the content into the variable as a JSON object. If a nested object of the JSON object does not contain a specific property 'id', it is assigned based on the text contained in the title. Later in the code, this id is going to be passed in the URL, so a `replace` method is run on the text (using `regex`) to ensure that all space characters are replaced with a hyphen. It also accounts for if the user has two notes with the same title, but different descriptions. This is then written as a new file that overwrites the existing file, and then the HTML file is sent to the browser - The HTML file has JavaScript that calls the API to populate the page with the notes being 'stored' in the JSON file (the JSON file is acting as a pseudo-database).
 
 'POST':
 
@@ -71,9 +76,14 @@ This route first establishes an empty variable to be an empty string. Next it re
             if (err) throw err;
             notes = JSON.parse(data);
             notes.push(newNote);
-            for (const note of notes) {
-                if (!note.id) {
-                    note.id = note.title.replace(/ +/g, '-');
+            for (let i = 0; i < notes.length; ++i) {
+                if (!notes[i].id) {
+                    notes[i].id = notes[i].title.replace(/ +/g, '-');
+                }
+                for (let j = i + 1; j < notes.length; ++j) {
+                    if (notes[i].id === notes[j].id) {
+                        notes[j].id += '-x';
+                    }
                 }
             }
             fs.writeFile('./db.json', JSON.stringify(notes), 'utf8', err => {
